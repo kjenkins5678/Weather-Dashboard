@@ -32,6 +32,7 @@ $(".btn").on("click", function() {
 
       var currentConditions = $("<div class='currentConditions'>");
       var ccName = $("<p class='name'>").text(response.name);
+      
       currentConditions.append(ccName);
       $(".weatherDisplay").append(currentConditions);
 
