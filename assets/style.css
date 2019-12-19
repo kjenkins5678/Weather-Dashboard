@@ -6,6 +6,10 @@
     background-color: gold;
 }
 
-.weatherDisplay{
+.currentWeatherDisplay{
     background-color: coral;
+}
+
+.forecastDisplay{
+    background-color: indianred;
 }

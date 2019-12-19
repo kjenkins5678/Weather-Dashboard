@@ -1,5 +1,17 @@
 var cities = [];
 
+function CurrentWeather(response){
+  var currentConditions = $("<div class='currentConditions'>");
+  var dateString = moment.unix(response.dt).format("MM/DD/YYYY");
+  var ccNameDate = $("<p class='nameDate'>").text(response.name + " " + dateString);
+  var currentTemp = $("<p class='currentTemp'>").text("Current Temperature: " + response.main.temp + " F");
+  var currentHum = $("<p class='currentHum'>").text("Current Humidity: " + response.main.humidity);
+  var wind = $("<p class='wind'>").text("Windspeed: " + response.wind.speed);
+
+  currentConditions.append(ccNameDate, currentTemp, currentHum, wind);
+  $(".currentWeatherDisplay").append(currentConditions);
+};
+
 $(".btn").on("click", function() {
 
   event.preventDefault();
@@ -8,7 +20,6 @@ $(".btn").on("click", function() {
   console.log(cities);
 
   $(".citySearches").append($("<div class='searched'>").text(city));
-
 
   var APIKey = "d93007fc75acd09b861e4011b5d15c06";
 
@@ -27,14 +38,7 @@ $(".btn").on("click", function() {
       // Log the queryURL
       console.log(queryURL);
 
-      // Log the resulting object
-      console.log(response.name);
-
-      var currentConditions = $("<div class='currentConditions'>");
-      var ccName = $("<p class='name'>").text(response.name);
-      
-      currentConditions.append(ccName);
-      $(".weatherDisplay").append(currentConditions);
+      CurrentWeather(response);
 
     });
 
