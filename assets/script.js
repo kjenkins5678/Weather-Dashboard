@@ -1,12 +1,13 @@
 var cities = [];
 var APIKey = "d93007fc75acd09b861e4011b5d15c06";
 var cityID = null;
+dateString = null;
 
 
 function CurrentWeather(response){
   $(".currentWeatherDisplay").empty();
   var currentConditions = $("<div class='currentConditions'>");
-  var dateString = moment.unix(response.dt).format("MM/DD/YYYY");
+  dateString = moment.unix(response.dt).format("MM/DD/YYYY");
   var ccNameDate = $("<p class='nameDate'>").text(response.name + " " + dateString);
   var currentTemp = $("<p class='currentTemp'>").text("Current Temperature: " + response.main.temp + " F");
   var currentHum = $("<p class='currentHum'>").text("Current Humidity: " + response.main.humidity);
@@ -49,9 +50,13 @@ function Forecast(cityID){
     .then(function(response) {
 
       // Log the queryURL
+      console.log("starting date: " + dateString);
+      //https://stackoverflow.com/questions/16808911/momentjs-how-do-i-build-moment-from-date-and-time-string
       console.log(response);
-
+      
       $(".forecastDisplay").empty();
+
+      
 
     });
 
