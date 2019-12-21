@@ -52,7 +52,11 @@ function Forecast(cityID){
       // Log the queryURL
       console.log("starting date: " + dateString);
       //https://stackoverflow.com/questions/16808911/momentjs-how-do-i-build-moment-from-date-and-time-string
-      console.log(response);
+
+      // var newDate = dateString.add(1, 'd'); // This doesn't work. can do moment method on non-moment object
+      var newDate = moment(dateString, "MM-DD-YYYY");
+      console.log(newDate);
+      // console.log(response);
       
       $(".forecastDisplay").empty();
 
