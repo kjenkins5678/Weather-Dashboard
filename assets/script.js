@@ -40,7 +40,7 @@ function UVindex(lat, long, count){
 };
 
 function Forecast(cityID){
-  queryURL = "https://api.openweathermap.org/data/2.5/forecast?id=" + cityID + "&appid=" + APIKey;
+  queryURL = "https://api.openweathermap.org/data/2.5/forecast?id=" + cityID + "&units=imperial&appid=" + APIKey;
   // Here we run our AJAX call to the OpenWeatherMap API
   $.ajax({
     url: queryURL,
@@ -49,17 +49,34 @@ function Forecast(cityID){
     // We store all of the retrieved data inside of an object called "response"
     .then(function(response) {
 
-      // Log the queryURL
-      console.log("starting date: " + dateString);
-      //https://stackoverflow.com/questions/16808911/momentjs-how-do-i-build-moment-from-date-and-time-string
-
-      // var newDate = dateString.add(1, 'd'); // This doesn't work. can do moment method on non-moment object
-      var newDate = moment(dateString, "MM-DD-YYYY");
-      console.log(newDate);
-      // console.log(response);
-      
       $(".forecastDisplay").empty();
 
+      // console.log(dateString + " 13");
+      // var newDate = moment(dateString + " 13", "MM/DD/YYYY H");
+      // var forcastDay1 = newDate.add(1, 'd');
+      // var forcast1TimeStamp = forcastDay1.format("MM/DD/YYYY H");
+      // console.log(forcast1TimeStamp);
+
+      for (i = 0; i<response.list.length; i++) {
+        if (moment(response.list[i].dt, "X").format("H") == '13'){
+          // console.log(moment(response.list[i].dt, "X").format());
+          // console.log(response.list[i].dt_txt);
+          var forecastDay = $("<div class='fDay row'>").text(moment(response.list[i].dt_txt, "YYYY-MM-DD HH:mm:ss").format("dddd Do"));
+
+          var forecastTemp = $("<div class='f'>").text("Temp: " + response.list[i].main.temp + " F");
+
+          forecastDay.append(forecastTemp);
+
+          $(".forecastDisplay").append(forecastDay);
+
+
+
+
+
+        };
+
+      };
+      
       
 
     });
