@@ -1,7 +1,10 @@
 var cities = [];
 var APIKey = "d93007fc75acd09b861e4011b5d15c06";
 var cityID = null;
-dateString = null;
+var dateString = null;
+var lat = null;
+var long = null;
+var curUVI = null;
 
 
 function CurrentWeather(response){
@@ -14,13 +17,15 @@ function CurrentWeather(response){
   var wind = $("<p class='wind'>").text("Windspeed: " + response.wind.speed);
 
   cityID = response.id;
+  lat = response.coord.lat;
+  long = response.coord.lon;
 
   currentConditions.append(ccNameDate, currentTemp, currentHum, wind);
   $(".currentWeatherDisplay").append(currentConditions);
 };
 
-function UVindex(lat, long, count){
-  queryURL = "http://api.openweathermap.org/data/2.5/uvi/forecast?appid="+ APIKey + "&lat="+ lat +"&lon=" + long;
+function UVindex(lat, long){
+  queryURL = "http://api.openweathermap.org/data/2.5/uvi?appid="+ APIKey + "&lat="+ lat +"&lon=" + long;
     // Here we run our AJAX call to the OpenWeatherMap API
     $.ajax({
       url: queryURL,
@@ -30,7 +35,9 @@ function UVindex(lat, long, count){
       .then(function(response) {
   
         // Log the queryURL
-        console.log(response[0]);
+        curUVI = response.value;
+        var currentUVI = $("<p class='currentUV'>").text("UV Index: " + curUVI);
+        $(".currentWeatherDisplay .currentConditions").append(currentUVI);
   
       });
 
@@ -109,6 +116,7 @@ $(".btn").on("click", function() {
       console.log(queryURL);
 
       CurrentWeather(response);
+      UVindex(lat, long);
       Forecast(cityID);
     });
 
