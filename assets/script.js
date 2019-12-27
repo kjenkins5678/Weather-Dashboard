@@ -9,6 +9,8 @@ var curUVI = null;
 
 function CurrentWeather(response){
   $(".currentWeatherDisplay").empty();
+
+  var currentTitle = $("<h3 class='card-title'>").text("Current Weather Conditions");
   var currentConditions = $("<div class='currentConditions'>");
   dateString = moment.unix(response.dt).format("MM/DD/YYYY");
   var ccNameDate = $("<p class='nameDate'>").text(response.name + " " + dateString);
@@ -21,10 +23,10 @@ function CurrentWeather(response){
   long = response.coord.lon;
 
   currentConditions.append(ccNameDate, currentTemp, currentHum, wind);
-  $(".currentWeatherDisplay").append(currentConditions);
+  $(".currentWeatherDisplay").append(currentTitle, currentConditions);
 };
 
-function UVindex(lat, long){
+function CurrentUVIndex(lat, long){
   queryURL = "http://api.openweathermap.org/data/2.5/uvi?appid="+ APIKey + "&lat="+ lat +"&lon=" + long;
     // Here we run our AJAX call to the OpenWeatherMap API
     $.ajax({
@@ -40,10 +42,6 @@ function UVindex(lat, long){
         $(".currentWeatherDisplay .currentConditions").append(currentUVI);
   
       });
-
-      // UVindex(response.coord.lat, response.coord.lon, 1);
-
-
 };
 
 function Forecast(cityID){
@@ -64,10 +62,16 @@ function Forecast(cityID){
       // var forcast1TimeStamp = forcastDay1.format("MM/DD/YYYY H");
       // console.log(forcast1TimeStamp);
 
+      var forecastTitle = $("<h3 class='card-title'>").text("5-Day Forecast");
+      $(".forecastDisplay").append(forecastTitle);
+
+
+
       for (i = 0; i<response.list.length; i++) {
         if (moment(response.list[i].dt, "X").format("H") == '13'){
           // console.log(moment(response.list[i].dt, "X").format());
           // console.log(response.list[i].dt_txt);
+
           var forecastDay = $("<div class='card fDay col-12'>").text(moment(response.list[i].dt_txt, "YYYY-MM-DD HH:mm:ss").format("dddd Do"));
 
           var forecastTemp = $("<div class='f card-body'>").text("Temp: " + response.list[i].main.temp + " F");
@@ -76,29 +80,34 @@ function Forecast(cityID){
 
           $(".forecastDisplay").append(forecastDay);
 
-
-
-
-
         };
 
       };
       
-      
-
     });
 
 };
 
-
 $(".btn").on("click", function() {
 
   event.preventDefault();
+
+  $(".citySearches").empty();
   city = $("#cityInput").val();
   cities.push(city);
-  console.log(cities);
 
-  $(".citySearches").append($("<div class='searched'>").text(city));
+  console.log(cities)
+
+
+  var searchTitle = $("<h5 class='card-title'>").text("Search History");
+
+  var searchedListSpace = $("<div class='searched-container'>");
+  $(".citySearches").append(searchTitle, searchedListSpace);
+
+  for (i = 0; i < cities.length; i++){
+    $(".searched-container").prepend($("<div class='searched'>").text(cities[i]));
+  };
+
 
   // Here we are building the URL we need to query the database
   var queryURL = "https://api.openweathermap.org/data/2.5/weather?" +
@@ -116,10 +125,8 @@ $(".btn").on("click", function() {
       console.log(queryURL);
 
       CurrentWeather(response);
-      UVindex(lat, long);
+      CurrentUVIndex(lat, long);
       Forecast(cityID);
     });
-
-
 
 });
