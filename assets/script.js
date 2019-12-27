@@ -105,7 +105,7 @@ $(".btn").on("click", function() {
   $(".citySearches").append(searchTitle, searchedListSpace);
 
   for (i = 0; i < cities.length; i++){
-    $(".searched-container").prepend($("<div class='searched'>").text(cities[i]));
+    $(".searched-container").prepend($("<button type='button' class='btn btn-link'>").text(cities[i])); //"<div class='searched'>"
   };
 
 
