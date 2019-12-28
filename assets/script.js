@@ -8,7 +8,7 @@ var lat = null;
 var long = null;
 var curUVI = null;
 
-function GetWeather(){
+function GetWeather(city){
   // Here we are building the URL we need to query the database
   var queryURL = "https://api.openweathermap.org/data/2.5/weather?" +
   "q=" + city + "&units=imperial&appid=" + APIKey;
@@ -75,21 +75,11 @@ function Forecast(cityID){
 
       $(".forecastDisplay").empty();
 
-      // console.log(dateString + " 13");
-      // var newDate = moment(dateString + " 13", "MM/DD/YYYY H");
-      // var forcastDay1 = newDate.add(1, 'd');
-      // var forcast1TimeStamp = forcastDay1.format("MM/DD/YYYY H");
-      // console.log(forcast1TimeStamp);
-
       var forecastTitle = $("<h3 class='card-title'>").text("5-Day Forecast");
       $(".forecastDisplay").append(forecastTitle);
 
-
-
       for (i = 0; i<response.list.length; i++) {
         if (moment(response.list[i].dt, "X").format("H") == '13'){
-          // console.log(moment(response.list[i].dt, "X").format());
-          // console.log(response.list[i].dt_txt);
 
           var forecastDay = $("<div class='card fDay col-12'>").text(moment(response.list[i].dt_txt, "YYYY-MM-DD HH:mm:ss").format("dddd Do"));
 
@@ -127,6 +117,14 @@ $("#search-btn").on("click", function() {
     $(".searched-container").prepend(historyBtn);
   };
 
-  GetWeather();
+  GetWeather(city);
+
+});
+
+$(".citySearches").on("click", ".btn-link", function() {
+
+  console.log(cities[$(this).attr("data-id")]);
+
+  GetWeather(cities[$(this).attr("data-id")]);
 
 });
