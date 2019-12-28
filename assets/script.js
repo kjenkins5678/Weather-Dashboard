@@ -81,11 +81,15 @@ function Forecast(cityID){
       for (i = 0; i<response.list.length; i++) {
         if (moment(response.list[i].dt, "X").format("H") == '13'){
 
-          var forecastDay = $("<div class='card fDay col-12'>").text(moment(response.list[i].dt_txt, "YYYY-MM-DD HH:mm:ss").format("dddd Do"));
+          var forecastDay = $("<div class='card fDay col-12'>");
+          
+          var forecastDayText = $("<h5 class='card-title'>").text(moment(response.list[i].dt_txt, "YYYY-MM-DD HH:mm:ss").format("dddd, MMMM Do"));
 
-          var forecastTemp = $("<div class='f card-body'>").text("Temp: " + response.list[i].main.temp + " F");
+          var forecastTemp = $("<p class='f-temp'>").text("Temp: " + response.list[i].main.temp + " F");
 
-          forecastDay.append(forecastTemp);
+          var forecastHumid = $("<p class='f-humid'>").text("Humidity: " + response.list[i].main.humidity);
+
+          forecastDay.append(forecastDayText, forecastTemp, forecastHumid);
 
           $(".forecastDisplay").append(forecastDay);
 
