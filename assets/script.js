@@ -25,23 +25,27 @@ $.ajax({
   });
 };
 
-
 function CurrentWeather(response){
   $(".currentWeatherDisplay").empty();
 
   var currentTitle = $("<h3 class='card-title'>").text("Current Weather Conditions");
-  var currentConditions = $("<div class='currentConditions'>");
+  var currentConditions = $("<div class='card currentConditions col-12'>");
   dateString = moment.unix(response.dt).format("MM/DD/YYYY");
-  var ccNameDate = $("<p class='nameDate'>").text(response.name + " " + dateString);
-  var currentTemp = $("<p class='currentTemp'>").text("Current Temperature: " + response.main.temp + " F");
-  var currentHum = $("<p class='currentHum'>").text("Current Humidity: " + response.main.humidity);
+  var ccNameDate = $("<h5 class='nameDate card-title'>").text(response.name + " " + dateString);
+  var currentImage = $("<img class='img-weather'>");
+
+  console.log(response.weather[0].icon);
+  currentImage.attr("src", "http://openweathermap.org/img/wn/" + response.weather[0].icon + "@2x.png");
+  currentImage.attr("alt", response.weather[0].description);
+  var currentTemp = $("<p class='currentTemp'>").text("Temp: " + response.main.temp + " F");
+  var currentHum = $("<p class='currentHum'>").text("Humidity: " + response.main.humidity);
   var wind = $("<p class='wind'>").text("Windspeed: " + response.wind.speed);
 
   cityID = response.id;
   lat = response.coord.lat;
   long = response.coord.lon;
 
-  currentConditions.append(ccNameDate, currentTemp, currentHum, wind);
+  currentConditions.append(ccNameDate, currentImage, currentTemp, currentHum, wind);
   $(".currentWeatherDisplay").append(currentTitle, currentConditions);
 };
 
@@ -85,11 +89,17 @@ function Forecast(cityID){
           
           var forecastDayText = $("<h5 class='card-title'>").text(moment(response.list[i].dt_txt, "YYYY-MM-DD HH:mm:ss").format("dddd, MMMM Do"));
 
+          var forecastImage = $("<img class='img-weather'>");
+
+          // console.log(response.list[i].weather[0].icon);
+          forecastImage.attr("src", "http://openweathermap.org/img/wn/" + response.list[i].weather[0].icon + "@2x.png");
+          forecastImage.attr("alt", response.list[i].weather[0].description);
+          
           var forecastTemp = $("<p class='f-temp'>").text("Temp: " + response.list[i].main.temp + " F");
 
           var forecastHumid = $("<p class='f-humid'>").text("Humidity: " + response.list[i].main.humidity);
 
-          forecastDay.append(forecastDayText, forecastTemp, forecastHumid);
+          forecastDay.append(forecastDayText, forecastImage, forecastTemp, forecastHumid);
 
           $(".forecastDisplay").append(forecastDay);
 
@@ -101,6 +111,7 @@ function Forecast(cityID){
 
 };
 
+
 $("#search-btn").on("click", function() {
 
   event.preventDefault();
@@ -109,9 +120,11 @@ $("#search-btn").on("click", function() {
   city = $("#cityInput").val();
   cities.push(city);
 
-  var searchTitle = $("<h5 class='card-title'>").text("Search History");
+
+  var searchTitle = $("<h6>").text("Search History");
 
   var searchedListSpace = $("<div class='searched-container'>");
+  
   $(".citySearches").append(searchTitle, searchedListSpace);
 
   for (i = 0; i < cities.length; i++){

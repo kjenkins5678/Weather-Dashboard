@@ -1,4 +1,4 @@
-.form-inline{
+/* .form-inline{
     background-color: aquamarine;
 }
 
@@ -12,4 +12,9 @@
 
 .forecastDisplay{
     background-color: indianred;
+} */
+
+.img-weather{
+    max-height: 100px;
+    max-width: 100px;
 }
