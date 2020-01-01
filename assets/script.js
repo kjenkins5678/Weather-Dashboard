@@ -8,6 +8,11 @@ var lat = null;
 var long = null;
 var curUVI = null;
 
+/* ------ GetWeather ------
+Set the query URL string
+Run AJAX call
+Run CurrentWeather, CurrentUVIndex, Forecast with AJAX response
+*/
 function GetWeather(city){
   // Here we are building the URL we need to query the database
   var queryURL = "https://api.openweathermap.org/data/2.5/weather?" +
@@ -18,13 +23,16 @@ $.ajax({
   url: queryURL,
   method: "GET"
 }).then(function(response) {
-    // console.log(queryURL);
     CurrentWeather(response);
     CurrentUVIndex(lat, long);
     Forecast(cityID);
   });
 };
 
+/* ------ CurrentWeather ------
+Clear Weather Display
+Create & Append Current Weather HTML
+*/
 function CurrentWeather(response){
   $(".currentWeatherDisplay").empty();
 
@@ -34,7 +42,6 @@ function CurrentWeather(response){
   var ccNameDate = $("<h5 class='nameDate card-title'>").text(response.name + " " + dateString);
   var currentImage = $("<img class='img-weather'>");
 
-  console.log(response.weather[0].icon);
   currentImage.attr("src", "http://openweathermap.org/img/wn/" + response.weather[0].icon + "@2x.png");
   currentImage.attr("alt", response.weather[0].description);
   var currentTemp = $("<p class='currentTemp'>").text("Temp: " + response.main.temp + " F");
@@ -49,6 +56,11 @@ function CurrentWeather(response){
   $(".currentWeatherDisplay").append(currentTitle, currentConditions);
 };
 
+/* ------ CurrentUVIndex ------
+Create UVI API query URL
+Run AJAX call
+Create & Append UVI HTML
+*/
 function CurrentUVIndex(lat, long){
   queryURL = "http://api.openweathermap.org/data/2.5/uvi?appid="+ APIKey + "&lat="+ lat +"&lon=" + long;
     // Here we run our AJAX call to the OpenWeatherMap API
@@ -67,6 +79,14 @@ function CurrentUVIndex(lat, long){
       });
 };
 
+/* ------ Forecast ------
+Create Forecast API query URL
+Run AJAX call
+Create & Append Forecast HTML
+Loop through API response list
+If forecast time is 1300
+Create & Append Forecast Details HTML
+*/
 function Forecast(cityID){
   queryURL = "https://api.openweathermap.org/data/2.5/forecast?id=" + cityID + "&units=imperial&appid=" + APIKey;
   // Here we run our AJAX call to the OpenWeatherMap API
@@ -91,7 +111,6 @@ function Forecast(cityID){
 
           var forecastImage = $("<img class='img-weather'>");
 
-          // console.log(response.list[i].weather[0].icon);
           forecastImage.attr("src", "http://openweathermap.org/img/wn/" + response.list[i].weather[0].icon + "@2x.png");
           forecastImage.attr("alt", response.list[i].weather[0].description);
           
@@ -111,7 +130,14 @@ function Forecast(cityID){
 
 };
 
-
+/* ------SearchButtonClickEvent-----
+Empty .citySearches
+Get value in text box
+Push value to cities list
+Create & Append search history HTML
+Create searched city buttons from cities list
+Call GetWeather function
+*/
 $("#search-btn").on("click", function() {
 
   event.preventDefault();
@@ -134,13 +160,17 @@ $("#search-btn").on("click", function() {
     $(".searched-container").prepend(historyBtn);
   };
 
+  console.log(cities)
+
   GetWeather(city);
 
 });
 
-$(".citySearches").on("click", ".btn-link", function() {
+/* ------ CityButtonsClickEvent -----
+Call GetWeather Function for with data-id of clicked button
+*/
 
-  console.log(cities[$(this).attr("data-id")]);
+$(".citySearches").on("click", ".btn-link", function() {
 
   GetWeather(cities[$(this).attr("data-id")]);
 
