@@ -1,19 +1,3 @@
-/* .form-inline{
-    background-color: aquamarine;
-}
-
-.citySearches{
-    background-color: gold;
-}
-
-.currentWeatherDisplay{
-    background-color: coral;
-}
-
-.forecastDisplay{
-    background-color: indianred;
-} */
-
 .navbar {
     background-color: #e3f2fd;
 }
@@ -33,4 +17,14 @@
 
 .fday{
     border-bottom: 1px solid rgba(0,0,0,.1)
+}
+
+@media screen and (max-width:577px){
+    div.col-1{
+        display: none;
+    }
+
+    #search-btn{
+        margin-top: 5px;
+    }
 }
