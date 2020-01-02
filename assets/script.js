@@ -45,24 +45,45 @@ Create & Append Current Weather HTML
 function CurrentWeather(response){
   $(".currentWeatherDisplay").empty();
 
-  var currentTitle = $("<h3 class='card-title'>").text("Current Weather Conditions");
-  var currentConditions = $("<div class='card currentConditions col-12'>");
+  var currentTitleRow = $("<div class='title-row col-12'>")
+  var currentTitle = $("<h4>").text("Current Weather Conditions");
+
+  currentTitleRow.append(currentTitle);
+
+  var currentConditions = $("<div class='currentConditions row'>");
+
+  var currentCityImgCol = $("<div class='image col-6'>");
+
   dateString = moment.unix(response.dt).format("MM/DD/YYYY");
-  var ccNameDate = $("<h5 class='nameDate card-title'>").text(response.name + " " + dateString);
+  var ccNameDate = $("<h6 class='nameDate'>").text(response.name + " " + dateString);
+
+  var currentFig = $("<figure class='figure'>");
+
   var currentImage = $("<img class='img-weather'>");
 
   currentImage.attr("src", "http://openweathermap.org/img/wn/" + response.weather[0].icon + "@2x.png");
   currentImage.attr("alt", response.weather[0].description);
+
+  var currentFigCaption = $("<figcaption class='fig-caption'>").text(response.weather[0].description);
+
+  currentFig.append(currentImage, currentFigCaption);
+
+  currentCityImgCol.append(ccNameDate, currentFig);
+
+  var currentDetails = $("<div class='details col-6'>");
+
   var currentTemp = $("<p class='currentTemp'>").text("Temp: " + response.main.temp + " F");
   var currentHum = $("<p class='currentHum'>").text("Humidity: " + response.main.humidity);
   var wind = $("<p class='wind'>").text("Windspeed: " + response.wind.speed);
+
+  currentDetails.append(currentTemp, currentHum, wind)
 
   cityID = response.id;
   lat = response.coord.lat;
   long = response.coord.lon;
 
-  currentConditions.append(ccNameDate, currentImage, currentTemp, currentHum, wind);
-  $(".currentWeatherDisplay").append(currentTitle, currentConditions);
+  currentConditions.append(currentCityImgCol, currentDetails);
+  $(".currentWeatherDisplay").append(currentTitleRow, currentConditions);
 };
 
 /* ------ CurrentUVIndex ------
@@ -83,7 +104,7 @@ function CurrentUVIndex(lat, long){
         // Log the queryURL
         curUVI = response.value;
         var currentUVI = $("<p class='currentUV'>").text("UV Index: " + curUVI);
-        $(".currentWeatherDisplay .currentConditions").append(currentUVI);
+        $(".currentWeatherDisplay .details").append(currentUVI);
   
       });
 };
@@ -108,26 +129,44 @@ function Forecast(cityID){
 
       $(".forecastDisplay").empty();
 
-      var forecastTitle = $("<h3 class='card-title'>").text("5-Day Forecast");
-      $(".forecastDisplay").append(forecastTitle);
+      var forecastTitleRow = $("<div class='title-row col-12'>")
+
+      var forecastTitle = $("<h4>").text("5-Day Forecast");
+
+      forecastTitleRow.append(forecastTitle);
+      $(".forecastDisplay").append(forecastTitleRow);
 
       for (i = 0; i<response.list.length; i++) {
         if (moment(response.list[i].dt, "X").format("H") == '13'){
 
-          var forecastDay = $("<div class='card fDay col-12'>");
+          var forecastDay = $("<div class='fDay row'>");
           
-          var forecastDayText = $("<h5 class='card-title'>").text(moment(response.list[i].dt_txt, "YYYY-MM-DD HH:mm:ss").format("dddd, MMMM Do"));
+          var forecastDayText = $("<h6>").text(moment(response.list[i].dt_txt, "YYYY-MM-DD HH:mm:ss").format("dddd, MMMM Do"));
 
+          var forecastFig = $("<figure class='figure'>");
+          
           var forecastImage = $("<img class='img-weather'>");
+
+          var forecastDateImgCol = $("<div class='image col-6'>");
 
           forecastImage.attr("src", "http://openweathermap.org/img/wn/" + response.list[i].weather[0].icon + "@2x.png");
           forecastImage.attr("alt", response.list[i].weather[0].description);
+
+          var forecastFigCaption = $("<figcaption class='fig-caption'>").text(response.list[i].weather[0].description);
+
+          forecastFig.append(forecastImage, forecastFigCaption);
+
+          forecastDateImgCol.append(forecastDayText, forecastFig);
+
+          var forecastDetails = $("<div class='details col-6'>");
           
           var forecastTemp = $("<p class='f-temp'>").text("Temp: " + response.list[i].main.temp + " F");
 
           var forecastHumid = $("<p class='f-humid'>").text("Humidity: " + response.list[i].main.humidity);
 
-          forecastDay.append(forecastDayText, forecastImage, forecastTemp, forecastHumid);
+          forecastDetails.append(forecastTemp, forecastHumid)
+          
+          forecastDay.append(forecastDateImgCol, forecastDetails);
 
           $(".forecastDisplay").append(forecastDay);
 
@@ -150,7 +189,7 @@ Call GetWeather function
 
 function SearchHistory(cities){
 
-  var searchTitle = $("<h6>").text("Search History");
+  var searchTitle = $("<p>").text("Search History");
 
   var searchedListSpace = $("<div class='searched-container'>");
 

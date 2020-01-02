@@ -14,7 +14,23 @@
     background-color: indianred;
 } */
 
+.navbar {
+    background-color: #e3f2fd;
+}
+
+.citySearches{
+    /* background-color: #F8F9f8; */
+    border-right:  1px solid rgba(0,0,0,.1)
+}
+
+.title-row{
+    border-bottom: 1px solid rgba(0,0,0,.1);
+}
 .img-weather{
     max-height: 100px;
     max-width: 100px;
+}
+
+.fday{
+    border-bottom: 1px solid rgba(0,0,0,.1)
 }

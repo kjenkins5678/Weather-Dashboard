@@ -6,22 +6,30 @@
 </head>
 <body>
 
-<div class="container">
+    <nav class="navbar navbar-light">
+        <a class="navbar-brand">Weather Dashboard</a>
+        <form class="form-inline my-2 my-leg-0">
+            <input type="text" class="form-control mr-sm-2" id="cityInput" placeholder="US City">
+            <button type="submit" class="btn btn-primary" id="search-btn">Submit</button>
+        </form>
+      </nav>
 
-    <form class="form-inline mt-2">
-        <label class="sr-only" for="cityInput">US City</label>
-        <input type="text" class="form-control mb-2 mr-sm-2" id="cityInput">
-        <button type="submit" class="btn btn-primary mb-2" id="search-btn">Submit</button>
-    </form>
-
+<div class="container-fluid">
     <div class="row">
-        <div class="col-3 citySearches"></div>
+        <nav class="col-2 citySearches">
+        </nav>
+
+        <div class="col-1"></div>
+        
         <div class="col-9">
             <div class="row currentWeatherDisplay"></div>
-            <div class="row forecastDisplay"></div>
+            <div class="row forecastDisplay mt-4"></div>
         </div>
-        
     </div>
+
+    <!-- <div class="row">
+    
+    </div> -->
 
 </div>
 
