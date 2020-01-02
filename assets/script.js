@@ -7,6 +7,15 @@ var dateString = null;
 var lat = null;
 var long = null;
 var curUVI = null;
+var stored = JSON.parse(localStorage.getItem("cities"));
+
+if (stored !== null) {
+  var lastSearched = stored[stored.length - 1]
+  console.log(lastSearched);
+  GetWeather(lastSearched);
+  SearchHistory(stored);
+  cities = cities.concat(stored);
+}
 
 /* ------ GetWeather ------
 Set the query URL string
@@ -130,7 +139,7 @@ function Forecast(cityID){
 
 };
 
-/* ------SearchButtonClickEvent-----
+/* ------ SearchButtonClickEvent -----
 Empty .citySearches
 Get value in text box
 Push value to cities list
@@ -138,19 +147,13 @@ Create & Append search history HTML
 Create searched city buttons from cities list
 Call GetWeather function
 */
-$("#search-btn").on("click", function() {
 
-  event.preventDefault();
-
-  $(".citySearches").empty();
-  city = $("#cityInput").val();
-  cities.push(city);
-
+function SearchHistory(cities){
 
   var searchTitle = $("<h6>").text("Search History");
 
   var searchedListSpace = $("<div class='searched-container'>");
-  
+
   $(".citySearches").append(searchTitle, searchedListSpace);
 
   for (i = 0; i < cities.length; i++){
@@ -159,8 +162,20 @@ $("#search-btn").on("click", function() {
     historyBtn.text(cities[i]);
     $(".searched-container").prepend(historyBtn);
   };
+};
 
-  console.log(cities)
+$("#search-btn").on("click", function() {
+
+  event.preventDefault();
+
+  $(".citySearches").empty();
+  city = $("#cityInput").val();
+  cities.push(city);
+
+  localStorage.removeItem("cities");
+  localStorage.setItem("cities", JSON.stringify(cities));
+
+  SearchHistory(cities);
 
   GetWeather(city);
 
@@ -171,6 +186,7 @@ Call GetWeather Function for with data-id of clicked button
 */
 
 $(".citySearches").on("click", ".btn-link", function() {
+  console.log(cities);
 
   GetWeather(cities[$(this).attr("data-id")]);
 
